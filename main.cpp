@@ -1,38 +1,24 @@
-#include <iostream>
-#include <string>
-#include <sstream>
+// -------
+// defines
+// -------
 
-int collatz_cycle(int num){
-   int cycle = 1;
-   while(num != 1){
-      if(num & 1){
-         num = (num * 3 + 1) >> 1;
-         ++cycle;
-      } else {
-         num = num >> 1;
-      }
-      ++cycle;
-   }
-   return cycle;
-}
+#ifdef ONLINE_JUDGE
+    #define NDEBUG
+#endif
 
-int collatz_max_cycle(int min, int max){
-   int maxCycles = 0;
-   for(int num = min; num <= max; num++){
-      int cycle = collatz_cycle(num);
-      if(cycle > maxCycles){
-          maxCycles = cycle;
-      }
-   }
-   return maxCycles;
-}
+// --------
+// includes
+// --------
 
-int main(int argc, char* argv[]){
-   std::string line;
-   int min, max;
-   while(std::cin >> min >> max){
-      int maxNumCycles = collatz_max_cycle(min, max);
-      std::cout << min << " " << max << " " << maxNumCycles << std::endl;
-   }
-   return 0;
+#include <iostream> // cin, cout
+
+#include "Collatz.h"
+
+// ----
+// main
+// ----
+
+int main () {
+    collatz_solve(std::cin, std::cout);
+    return 0;
 }
