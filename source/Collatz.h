@@ -28,7 +28,7 @@ std::pair<int, int> collatz_read (std::istream& r);
  * @param j the end       of the range, inclusive
  * @return the max cycle length of the range [i, j]
  */
-int collatz_eval (int i, int j);
+unsigned long collatz_eval (int i, int j);
 
 
 // -------------
@@ -39,7 +39,7 @@ int collatz_eval (int i, int j);
  * @param n the number to calulate cycles on, has to be positive
  * @reutrn the cycle length for given number
  */
-int collatz_cycle (int n);
+unsigned long collatz_cycle (unsigned long n);
 
 // -------------
 // collatz_print

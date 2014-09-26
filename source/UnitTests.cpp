@@ -44,6 +44,18 @@ TEST(Collatz, eval_4) {
     const int v = collatz_eval(900, 1000);
     ASSERT_EQ(174, v);}
 
+TEST(Collatz, eval_5) {
+    const int v = collatz_eval(111111, 999999);
+    ASSERT_EQ(525, v);}
+
+TEST(Collatz, eval_6) {
+    const int v = collatz_eval(10100, 200201);
+    ASSERT_EQ(383, v);}
+
+TEST(Collatz, eval_7) {
+    const int v = collatz_eval(1, 999999);
+    ASSERT_EQ(525, v);}
+
 // -----
 // Cycle
 // -----
@@ -54,6 +66,10 @@ TEST(Collatz, cycle_1) {
 TEST(Collatz, cycle_2) {
     const int v = collatz_cycle(10);
     ASSERT_EQ(7, v);}
+
+TEST(Collatz, cycle_3) {
+    const int v = collatz_cycle(419839);
+    ASSERT_EQ(162, v);}
 
 // -----
 // print
