@@ -1,3 +1,5 @@
+SRC_DIR = ./source
+
 all: RunCollatz
 
 Collatz.log:
@@ -6,11 +8,11 @@ Collatz.log:
 Doxyfile:
 	doxygen -g
 
-html: Doxyfile Collatz.h Collatz.cpp main.cpp TestCollatz.cpp
+html: Doxyfile $(SRC_DIR)/Collatz.h $(SRC_DIR)/Collatz.cpp $(SRC_DIR)/main.cpp $(SRC_DIR)/TestCollatz.cpp
 	doxygen Doxyfile
 
-RunCollatz: Collatz.h Collatz.cpp main.cpp
-	g++ -pedantic -std=c++11 -Wall Collatz.cpp main.cpp -o RunCollatz
+RunCollatz: $(SRC_DIR)/Collatz.h $(SRC_DIR)/Collatz.cpp $(SRC_DIR)/main.cpp
+	g++ -pedantic -std=c++11 -Wall $(filter %.cpp, $^) -o RunCollatz
 
 RunCollatz.out: RunCollatz RunCollatz.in
 	RunCollatz < RunCollatz.in > RunCollatz.tmp
@@ -19,13 +21,22 @@ RunCollatz.tmp: RunCollatz RunCollatz.in
 	RunCollatz < RunCollatz.in > RunCollatz.tmp
 	diff RunCollatz.tmp RunCollatz.out
 
-test: Collatz.h Collatz.cpp UnitTests.cpp
-	g++ -fprofile-arcs -ftest-coverage -pedantic -std=c++11 -Wall Collatz.cpp UnitTests.cpp -o test -lgtest -lgtest_main -lpthread
+test: $(SRC_DIR)/Collatz.h $(SRC_DIR)/Collatz.cpp $(SRC_DIR)/UnitTests.cpp
+	g++ -pedantic -std=c++11 -Wall $(filter %.cpp, $^) -o test -lgtest -lgtest_main -lpthread
 
 TestCollatz.out: test
 	valgrind ./test        >  TestCollatz.out 2>&1
 	gcov -b Collatz.cpp     >> TestCollatz.out
 	gcov -b UnitTests.cpp >> TestCollatz.out
+
+gen: $(SRC_DIR)/randomRangeGenerator.cpp
+	g++ -pedantic -std=c++11 -Wall $^ -o gen
+
+judge: $(SRC_DIR)/main.cpp $(SRC_DIR)/Collatz.cpp
+	@mkdir -p $(SRC_DIR)/Test
+	@cp $(SRC_DIR)/Collatz.cpp $(SRC_DIR)/Test/Collatz.cpp
+	@echo "" >> $(SRC_DIR)/Test/Collatz.cpp
+	@grep -A500 "int main" $(SRC_DIR)/main.cpp >> $(SRC_DIR)/Test/Collatz.cpp
 
 clean:
 	rm -f *.gcda
@@ -36,3 +47,5 @@ clean:
 	rm -f RunCollatz.tmp
 	rm -f test
 	rm -f TestCollatz.out
+	rm -f -r $(SRC_DIR)/Test
+	rm -f gen
