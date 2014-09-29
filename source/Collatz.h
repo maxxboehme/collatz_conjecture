@@ -19,6 +19,30 @@
  */
 std::pair<int, int> collatz_read (std::istream& r);
 
+/**
+ * returns min index and max index of range cache
+ * @param min minimum of range
+ * @param max maximum of range
+ * @return a pair of ints, representing the beginning and end of a range for range cache, [i, j]
+ */
+std::pair<int, int> range_index(int min, int max);
+
+/**
+ * maximum length cycle for indexes in range cache
+ * @param minIdex minimum index
+ * @param maxIndex maximum index
+ * @return an unsigned int with is the maximum cycle lenth found between given ranges.
+ */
+unsigned int max_cached(int minIndex, int maxIndex);
+
+/**
+ * optimization
+ * @param i the beginning of the range, inclusive
+ * @param j the end       of the range, inclusive
+ * @return the max cycle length of the range [i, j]
+ */
+unsigned long eval (int i, int j);
+
 // ------------
 // collatz_eval
 // ------------

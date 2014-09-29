@@ -1,4 +1,5 @@
 SRC_DIR = ./source
+TOOL_DIR = $(SRC_DIR)/tools
 
 all: RunCollatz
 
@@ -29,14 +30,17 @@ TestCollatz.out: test
 	gcov -b Collatz.cpp     >> TestCollatz.out
 	gcov -b UnitTests.cpp >> TestCollatz.out
 
-gen: $(SRC_DIR)/randomRangeGenerator.cpp
+gen: $(TOOL_DIR)/randomRangeGenerator.cpp
 	g++ -pedantic -std=c++11 -Wall $^ -o gen
 
+range: $(TOOLS_DIR)/rangeCacheCreator.cpp
+	g++ -pedantic -std=c++11 -Wall $^ -o rgen
+
 judge: $(SRC_DIR)/main.cpp $(SRC_DIR)/Collatz.cpp
-	@mkdir -p $(SRC_DIR)/Test
-	@cp $(SRC_DIR)/Collatz.cpp $(SRC_DIR)/Test/Collatz.cpp
-	@echo "" >> $(SRC_DIR)/Test/Collatz.cpp
-	@grep -A500 "int main" $(SRC_DIR)/main.cpp >> $(SRC_DIR)/Test/Collatz.cpp
+	@mkdir -p $(SRC_DIR)/juddge
+	@cp $(SRC_DIR)/Collatz.cpp $(SRC_DIR)/judge/Collatz.cpp
+	@echo "" >> $(SRC_DIR)/judge/Collatz.cpp
+	@grep -A500 "int main" $(SRC_DIR)/main.cpp >> $(SRC_DIR)/judge/Collatz.cpp
 
 clean:
 	rm -f *.gcda
@@ -47,5 +51,6 @@ clean:
 	rm -f RunCollatz.tmp
 	rm -f test
 	rm -f TestCollatz.out
-	rm -f -r $(SRC_DIR)/Test
+	rm -f -r $(SRC_DIR)/judge
 	rm -f gen
+	rm -f rgen
