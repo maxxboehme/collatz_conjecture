@@ -1,9 +1,9 @@
-#include "Collatz.cpp"
+#include "../Collatz.cpp"
 #include <iostream>
 #include <string>
 #include <sstream>
 
-const int DIVIDE = 10000;
+const int DIVIDE = 1000;
 
 int main(int argc, char** argv){
    int end = 1000000;

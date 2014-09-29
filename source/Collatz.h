@@ -52,7 +52,7 @@ unsigned long eval (int i, int j);
  * @param j the end       of the range, inclusive
  * @return the max cycle length of the range [i, j]
  */
-unsigned long collatz_eval (int i, int j);
+unsigned long collatz_eval (int min, int max);
 
 
 // -------------

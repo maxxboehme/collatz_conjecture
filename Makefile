@@ -33,11 +33,11 @@ TestCollatz.out: test
 gen: $(TOOL_DIR)/randomRangeGenerator.cpp
 	g++ -pedantic -std=c++11 -Wall $^ -o gen
 
-range: $(TOOLS_DIR)/rangeCacheCreator.cpp
+range: $(TOOL_DIR)/rangeCacheCreator.cpp
 	g++ -pedantic -std=c++11 -Wall $^ -o rgen
 
 judge: $(SRC_DIR)/main.cpp $(SRC_DIR)/Collatz.cpp
-	@mkdir -p $(SRC_DIR)/juddge
+	@mkdir -p $(SRC_DIR)/judge
 	@cp $(SRC_DIR)/Collatz.cpp $(SRC_DIR)/judge/Collatz.cpp
 	@echo "" >> $(SRC_DIR)/judge/Collatz.cpp
 	@grep -A500 "int main" $(SRC_DIR)/main.cpp >> $(SRC_DIR)/judge/Collatz.cpp
