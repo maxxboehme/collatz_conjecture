@@ -6,18 +6,19 @@
 #include <iostream> // endl, istream, ostream
 #include <utility>  // make_pair, pair
 #include <algorithm> // min, max
+#include <cstring>
 
 #define GROUPS 1000
 #define GAP 1000
 
 const unsigned int RANGE_CACHE[] = {179, 182, 217, 238, 215, 236, 262, 252, 247, 260, 268, 250, 263, 276, 271, 271, 266, 279, 261, 274, 256, 269, 269, 282, 264, 264, 308, 259, 259, 272, 272, 285, 267, 267, 311, 324, 249, 306, 244, 306, 288, 257, 288, 270, 270, 314, 283, 314, 296, 296, 278, 309, 340, 322, 260, 260, 322, 304, 273, 304, 335, 317, 286, 330, 299, 268, 268, 312, 312, 299, 312, 325, 263, 294, 325, 307, 307, 351, 338, 307, 320, 320, 320, 289, 320, 302, 302, 333, 333, 315, 315, 333, 315, 284, 315, 328, 297, 297, 284, 328, 341, 310, 310, 248, 310, 341, 354, 292, 279, 310, 292, 323, 323, 292, 305, 349, 305, 305, 336, 305, 318, 336, 318, 331, 287, 318, 331, 287, 331, 344, 331, 300, 331, 313, 300, 344, 313, 331, 313, 313, 344, 326, 375, 282, 326, 295, 357, 295, 326, 326, 370, 295, 308, 308, 352, 308, 383, 339, 321, 352, 370, 290, 339, 321, 334, 321, 352, 321, 321, 334, 290, 334, 303, 347, 334, 272, 334, 334, 347, 303, 365, 316, 334, 254, 316, 329, 347, 329, 316, 360, 329, 329, 347, 329, 342, 360, 298, 285, 329, 329, 342, 311, 342, 311, 311, 355, 373, 311, 311, 311, 342, 355, 355, 373, 293, 280, 386, 324, 324, 355, 324, 355, 324, 324, 324, 368, 368, 306, 355, 306, 443, 350, 337, 368, 381, 306, 337, 350, 306, 350, 368, 275, 319, 337, 275, 319, 332, 350, 288, 350, 332, 319, 319, 332, 363, 288, 332, 345, 301, 345, 332, 332, 301, 407, 332, 332, 314, 345, 270, 345, 440, 283, 314, 358, 332, 345, 314, 389, 345, 314, 345, 358, 314, 358, 358, 376, 314, 327, 422, 345, 327, 327, 340, 358, 296, 358, 327, 327, 371, 327, 371, 296, 340, 340, 340, 265, 309, 309, 371, 340, 371, 309, 384, 340, 278, 340, 353, 309, 353, 322, 371, 353, 309, 322, 384, 340, 247, 322, 291, 353, 322, 291, 353, 335, 322, 322, 366, 366, 335, 366, 304, 335, 353, 335, 304, 441, 348, 322, 335, 366, 304, 379, 335, 304, 348, 379, 348, 304, 379, 348, 443, 348, 361, 317, 317, 361, 348, 286, 317, 361, 392, 348, 317, 348, 330, 361, 423, 361, 330, 361, 379, 374, 361, 330, 330, 348, 330, 299, 330, 436, 361, 330, 299, 361, 405, 312, 330, 330, 374, 299, 374, 387, 268, 343, 343, 438, 361, 268, 312, 312, 449, 330, 343, 374, 374, 312, 387, 343, 343, 281, 343, 325, 356, 418, 356, 356, 356, 374, 294, 281, 312, 343, 420, 343, 356, 281, 325, 387, 400, 356, 325, 294, 356, 338, 325, 338, 325, 325, 369, 369, 387, 307, 294, 369, 338, 338, 356, 338, 307, 307, 307, 444, 369, 325, 338, 369, 369, 413, 382, 338, 307, 276, 338, 307, 382, 320, 307, 382, 351, 351, 446, 382, 351, 307, 320, 338, 382, 415, 382, 351, 320, 320, 426, 395, 351, 320, 320, 289, 351, 395, 364, 320, 426, 320, 364, 364, 382, 364, 377, 364, 333, 470, 333, 351, 364, 395, 302, 333, 439, 364, 333, 364, 333, 302, 364, 408, 408, 377, 377, 333, 346, 346, 377, 377, 346, 302, 333, 377, 346, 346, 441, 364, 346, 359, 315, 346, 452, 377, 333, 315, 346, 377, 315, 346, 421, 390, 346, 315, 315, 284, 359, 328, 359, 328, 421, 328, 359, 359, 359, 359, 377, 359, 372, 359, 328, 346, 390, 423, 346, 359, 266, 328, 328, 434, 372, 359, 359, 328, 315, 297, 359, 403, 328, 328, 328, 328, 372, 372, 341, 372, 372, 403, 297, 297, 372, 341, 328, 341, 436, 359, 341, 354, 310, 310, 310, 447, 372, 372, 310, 341, 372, 372, 310, 354, 385, 354, 509, 341, 279, 279, 341, 310, 385, 354, 310, 416, 310, 354, 354, 354, 449, 372, 416, 279, 279, 310, 323, 341, 323, 418, 341, 336, 354, 385, 323, 385, 429, 354, 398, 354, 323, 323, 292, 292, 367, 398, 323, 367, 323, 292, 323, 323, 367, 336, 367, 385, 336, 336, 380, 367, 336, 336, 305, 380, 336, 354, 398, 367, 292, 336, 336, 442, 323, 367, 367, 336, 336, 318, 367, 367, 367, 411, 380, 349, 504, 380, 305, 349, 349, 336, 380, 380, 411, 380, 305, 305, 380, 349, 336, 349, 444, 367, 411, 349, 362, 305, 349, 318, 362, 318, 413, 336, 380, 349, 349, 424, 318, 380, 424, 424, 393, 318, 349, 318, 318, 349, 287, 362, 318, 393, 362, 331, 318, 424, 318, 362, 362, 331, 362, 362, 380, 362, 331, 375, 362, 331, 331, 468, 331, 426, 349, 344, 393, 362, 331, 437, 331, 393, 437, 362, 507, 362, 331, 331, 313, 375, 300, 362, 406, 406, 375, 344, 437, 375, 331, 331, 468, 344, 300, 375, 375, 406, 388, 300, 331, 375, 344, 406, 331, 344, 439, 287, 362, 375, 313, 357, 344, 344, 450, 357, 450, 375, 520, 375, 326, 344, 313, 419, 313, 375, 344, 419, 388, 357, 344, 313, 344, 525, 344, 388, 357, 313, 388, 331, 357, 401, 313, 419, 313, 357, 357, 357, 326, 357, 452, 388, 375, 357, 370, 295, 357, 326, 326, 344, 326, 421, 326, 344, 357, 388, 326, 432, 326, 326, 388, 432, 370, 401, 326, 357, 326, 326, 313, 370, 295, 370, 401, 401, 295, 370, 339, 326, 295, 326, 370, 326, 370, 339, 370, 295, 401, 401, 383, 295, 383, 295, 445, 326, 370, 326, 476, 383, 434, 357, 370, 339, 339, 352, 339, 432, 339, 339, 445, 308, 515, 339, 370, 476, 383, 339, 370, 308, 370, 370, 414, 414, 383, 352, 445, 507, 383, 339, 339, 352, 383, 352, 383, 383, 383, 352, 414, 383, 414, 414, 383, 339, 352, 352, 321, 352, 447, 352, 383, 414, 352, 321, 365, 308, 321, 352, 458, 352, 321, 383, 416, 339, 383, 334, 383, 334, 427, 321, 383, 383, 352, 427, 352, 396, 321, 352, 321, 321, 352, 290, 365, 365, 365, 352, 396, 396, 427};
-
+unsigned short CACHE[1000000];
 
 // ------------
 // collatz_read
 // ------------
 
-inline std::pair<int, int> collatz_read (std::istream& r) {
+std::pair<int, int> collatz_read (std::istream& r) {
     int i, j;
     i = j = 0;
     r >> i >> j;
@@ -27,7 +28,8 @@ inline std::pair<int, int> collatz_read (std::istream& r) {
 // -----------
 // range_index
 // -----------
-inline std::pair<int, int> range_index(int min, int max){
+
+std::pair<int, int> range_index(int min, int max){
    int minIndex = min / GAP;
    if(min % GAP != 0) {
       ++minIndex;
@@ -37,7 +39,11 @@ inline std::pair<int, int> range_index(int min, int max){
    return std::make_pair(minIndex, maxIndex);
 }
 
-inline int max_cached(int minIndex, int maxIndex){
+// ----------
+// max_cached
+// ----------
+
+int max_cached(int minIndex, int maxIndex){
    if (minIndex > maxIndex)
       return -1;
 
@@ -49,6 +55,10 @@ inline int max_cached(int minIndex, int maxIndex){
    }
    return max;
 }
+
+// -------------
+// collatz_cycle
+// -------------
 
 inline unsigned long collatz_cycle(unsigned long n){
    unsigned long cycle = 1;
@@ -64,14 +74,43 @@ inline unsigned long collatz_cycle(unsigned long n){
    return cycle;
 }
 
+// -------------
+// collatz_cycle_re
+// -------------
+
+inline unsigned long collatz_cycle_re(unsigned long n){
+   if(n == 1){
+        return 1;
+   }else if(n < 1000000){
+        if(CACHE[n]){
+            return CACHE[n];
+        } else if(n & 1){
+            CACHE[n] = collatz_cycle_re(n + (n >> 1) + 1) + 2;
+            return CACHE[n];
+        } else{
+            CACHE[n] = collatz_cycle_re(n >> 1) + 1;
+            return CACHE[n];
+        }
+    } else {
+        if(n & 1){
+            return collatz_cycle_re(n + (n >> 1) + 1) + 2;
+        } else {
+            return collatz_cycle_re(n >> 1) + 1;
+        }
+    }
+}
+
 // ------------
 // collatz_eval
 // ------------
 
-inline unsigned long collatz_eval (int min, int max) {
+unsigned long collatz_eval (int min, int max) {
    unsigned long maxCycles = 0;
    for(int num = min; num <= max; ++num){
-      unsigned long cycle = collatz_cycle(num);
+      unsigned long cycle = CACHE[num];
+      if(!cycle){
+          cycle = collatz_cycle_re(num);
+      }
       if(cycle > maxCycles){
           maxCycles = cycle;
       }
@@ -79,13 +118,13 @@ inline unsigned long collatz_eval (int min, int max) {
    return maxCycles;
 }
 
-inline unsigned long eval (int i, int j) {
+// -----
+// eval
+// -----
+
+unsigned long eval (int i, int j) {
    int min = std::min(i, j);
    int max = std::max(i, j);
-   int m = (max >> 1) + 1;
-   if (min < m) {
-      min = m;
-   }
    std::pair<int, int> cache_indexes = range_index(min, max);
    int cachedResult = max_cached(cache_indexes.first, cache_indexes.second);
    if(cachedResult == -1){
@@ -94,14 +133,20 @@ inline unsigned long eval (int i, int j) {
    unsigned long maxCycle = cachedResult;
    int cacheMin = cache_indexes.first * GAP + 1;
    for(int i = min; i < cacheMin; ++i){
-      unsigned long cycle = collatz_cycle(i);
+      unsigned long cycle = CACHE[i];
+      if(!cycle){
+          cycle = collatz_cycle_re(i);
+      }
       if(cycle > maxCycle){
           maxCycle = cycle;
       }
    }
    int cacheMax = (cache_indexes.second +1) * GAP + 1;
    for(int i = cacheMax; i <= max; ++i){
-      unsigned long cycle = collatz_cycle(i);
+      unsigned long cycle = CACHE[i];
+      if(!cycle){
+          cycle = collatz_cycle_re(i);
+      }
       if(cycle > maxCycle){
           maxCycle = cycle;
       }
@@ -113,7 +158,7 @@ inline unsigned long eval (int i, int j) {
 // collatz_print
 // -------------
 
-inline void collatz_print (std::ostream& w, int i, int j, int v) {
+void collatz_print (std::ostream& w, int i, int j, int v) {
     w << i << " " << j << " " << v << std::endl;
 }
 
@@ -122,6 +167,7 @@ inline void collatz_print (std::ostream& w, int i, int j, int v) {
 // -------------
 
 void collatz_solve (std::istream& r, std::ostream& w) {
+    std::memset(CACHE, 0, sizeof(CACHE));
     while (true) {
         const std::pair<int, int> p = collatz_read(r);
         if (p == std::make_pair(0, 0))
@@ -132,3 +178,4 @@ void collatz_solve (std::istream& r, std::ostream& w) {
         collatz_print(w, i, j, v);
     }
 }
+

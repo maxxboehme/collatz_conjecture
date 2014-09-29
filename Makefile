@@ -37,10 +37,10 @@ range: $(TOOL_DIR)/rangeCacheCreator.cpp
 	g++ -pedantic -std=c++11 -Wall $^ -o rgen
 
 judge: $(SRC_DIR)/main.cpp $(SRC_DIR)/Collatz.cpp
-	@mkdir -p $(SRC_DIR)/judge
-	@cp $(SRC_DIR)/Collatz.cpp $(SRC_DIR)/judge/Collatz.cpp
-	@echo "" >> $(SRC_DIR)/judge/Collatz.cpp
-	@grep -A500 "int main" $(SRC_DIR)/main.cpp >> $(SRC_DIR)/judge/Collatz.cpp
+	@mkdir -p judge
+	@cp $(SRC_DIR)/Collatz.cpp ./judge/Collatz.cpp
+	@echo "" >> ./judge/Collatz.cpp
+	@grep -A500 "int main" $(SRC_DIR)/main.cpp >> ./judge/Collatz.cpp
 
 clean:
 	rm -f *.gcda
@@ -51,6 +51,6 @@ clean:
 	rm -f RunCollatz.tmp
 	rm -f test
 	rm -f TestCollatz.out
-	rm -f -r $(SRC_DIR)/judge
+	rm -f -r ./judge
 	rm -f gen
 	rm -f rgen
